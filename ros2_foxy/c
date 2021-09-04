@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [[ ( $1 == "build" || $1 == "b" ) ]]; then
+  docker build -t ros:ros2-foxy-base .
+
+elif [[ ( $1 == "start" || $1 == "u" ) ]]; then
+  docker run -it \
+             -d \
+             --rm \
+             --env="DISPLAY" \
+             -e "TERM=xterm-256color" \
+             -v  /tmp/.X11-unix:/tmp/.X11-unix:rw \
+             --name ros2_foxy \
+             --hostname ros2_foxy \
+             ros:ros2-foxy-base
+
+elif [[ ( $1 == "stop" || $1 == "s" ) ]]; then
+  docker stop -t 5 ros2_foxy
+
+elif [[ ( $1 == "connect" || $1 == "a" ) ]]; then
+  docker exec -it ros2_foxy bash
+
+fi
