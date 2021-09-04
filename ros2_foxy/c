@@ -1,5 +1,12 @@
 #!/bin/bash
 
+CMD=" "
+for (( i=2; i <= $#; i++ ))
+do
+  CMD+=${!i}
+  CMD+=" "
+done
+
 if [[ ( $1 == "build" || $1 == "b" ) ]]; then
   docker build -t ros:ros2-foxy-base .
 
@@ -12,6 +19,7 @@ elif [[ ( $1 == "start" || $1 == "u" ) ]]; then
              -v  /tmp/.X11-unix:/tmp/.X11-unix:rw \
              --name ros2_foxy \
              --hostname ros2_foxy \
+             ${CMD} \
              ros:ros2-foxy-base
 
 elif [[ ( $1 == "stop" || $1 == "s" ) ]]; then

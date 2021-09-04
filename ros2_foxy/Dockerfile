@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y \
         vim-gtk \
         xterm \
         iputils-ping \
+        tcpdump \
     && rm -rf /var/lib/apt/lists/*
 
 # install bootstrap tools
@@ -35,6 +36,7 @@ RUN colcon mixin add default \
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ros-foxy-ros-base=0.9.2-1* \
         ros-foxy-turtlesim \
+        ros-foxy-demo-nodes-cpp \
     && rm -rf /var/lib/apt/lists/*
 
 # create user
