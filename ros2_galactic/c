@@ -1,0 +1,31 @@
+#!/bin/bash
+
+CMD=" "
+for (( i=2; i <= $#; i++ ))
+do
+  CMD+=${!i}
+  CMD+=" "
+done
+
+if [[ ( $1 == "build" || $1 == "b" ) ]]; then
+  docker build -t ros:ros2-galactic-base .
+
+elif [[ ( $1 == "start" || $1 == "u" ) ]]; then
+  docker run -it \
+             -d \
+             --rm \
+             --env="DISPLAY" \
+             -e "TERM=xterm-256color" \
+             -v  /tmp/.X11-unix:/tmp/.X11-unix:rw \
+             --name ros2_galactic \
+             --hostname ros2_galactic \
+             ${CMD} \
+             ros:ros2-galactic-base
+
+elif [[ ( $1 == "stop" || $1 == "s" ) ]]; then
+  docker stop -t 5 ros2_galactic
+
+elif [[ ( $1 == "connect" || $1 == "a" ) ]]; then
+  docker exec -it ros2_galactic bash
+
+fi

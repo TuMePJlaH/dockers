@@ -1,6 +1,6 @@
 # This is an auto generated Dockerfile for ros:ros-base
 # generated from docker_images_ros2/create_ros_image.Dockerfile.em
-FROM ros:foxy-ros-core-focal
+FROM ros:galactic-ros-core-focal
 
 RUN apt-get update && apt-get install -y \
         sudo \
@@ -8,9 +8,6 @@ RUN apt-get update && apt-get install -y \
         xterm \
         iputils-ping \
         tcpdump \
-        wget \
-        cmake \
-        g++ \
     && rm -rf /var/lib/apt/lists/*
 
 # install bootstrap tools
@@ -21,12 +18,11 @@ RUN apt-get update && apt-get install -y \
         python3-colcon-mixin \
         python3-rosdep \
         python3-vcstool \
-        python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
+# bootstrap rosdep
+RUN rosdep init
 
-## bootstrap rosdep
-RUN rosdep init 
 
 # setup colcon mixin and metadata
 RUN colcon mixin add default \
@@ -38,9 +34,9 @@ RUN colcon mixin add default \
 
 # install ros2 packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        ros-foxy-ros-base=0.9.2-1* \
-        ros-foxy-turtlesim \
-        ros-foxy-demo-nodes-cpp \
+        ros-galactic-ros-base=0.9.3-2* \
+        ros-galactic-turtlesim \
+        ros-galactic-demo-nodes-cpp \
     && rm -rf /var/lib/apt/lists/*
 
 # create user
