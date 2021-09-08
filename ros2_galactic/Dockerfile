@@ -20,9 +20,6 @@ RUN apt-get update && apt-get install -y \
         python3-vcstool \
     && rm -rf /var/lib/apt/lists/*
 
-# bootstrap rosdep
-RUN rosdep init
-
 
 # setup colcon mixin and metadata
 RUN colcon mixin add default \
@@ -46,5 +43,3 @@ USER ${USERNAME}
 WORKDIR /home/${USERNAME}
 
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/${USERNAME}/.bashrc
-
-RUN rosdep update --rosdistro $ROS_DISTRO

@@ -25,9 +25,6 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 
-## bootstrap rosdep
-RUN rosdep init 
-
 # setup colcon mixin and metadata
 RUN colcon mixin add default \
       https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml && \
@@ -50,5 +47,3 @@ USER ${USERNAME}
 WORKDIR /home/${USERNAME}
 
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/${USERNAME}/.bashrc
-
-RUN rosdep update --rosdistro $ROS_DISTRO
