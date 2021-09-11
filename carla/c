@@ -1,0 +1,32 @@
+#!/bin/bash
+
+CMD=" "
+for (( i=2; i <= $#; i++ ))
+do
+  CMD+=${!i}
+  CMD+=" "
+done
+
+TAG="local"
+
+if [[ ( $1 == "build" || $1 == "b" ) ]]; then
+  docker build -t carlasim/carla:${TAG} .
+
+elif [[ ( $1 == "start" || $1 == "u" ) ]]; then
+  docker run --privileged \
+             --rm \
+             --gpus all \
+             --net=host \
+             --name carla_sim \
+             -e "TERM=xterm-256color" \
+             -e DISPLAY=$DISPLAY \
+             ${CMD} \
+             carlasim/carla:${TAG} /bin/bash ./CarlaUE4.sh
+
+elif [[ ( $1 == "stop" || $1 == "s" ) ]]; then
+  docker stop -t 5 carla_sim
+
+elif [[ ( $1 == "connect" || $1 == "a" ) ]]; then
+  docker exec -it carla_sim bash
+
+fi
