@@ -1,5 +1,8 @@
 #!/bin/bash
 
+TAG="local"
+NAME="carla_sim"
+
 CMD=" "
 for (( i=2; i <= $#; i++ ))
 do
@@ -7,26 +10,26 @@ do
   CMD+=" "
 done
 
-TAG="local"
-
 if [[ ( $1 == "build" || $1 == "b" ) ]]; then
   docker build -t carlasim/carla:${TAG} .
 
 elif [[ ( $1 == "start" || $1 == "u" ) ]]; then
   docker run --privileged \
+             -it \
+             -d \
              --rm \
              --gpus all \
              --net=host \
-             --name carla_sim \
+             --name ${NAME} \
              -e "TERM=xterm-256color" \
              -e DISPLAY=$DISPLAY \
              ${CMD} \
-             carlasim/carla:${TAG} /bin/bash ./CarlaUE4.sh
+             carlasim/carla:${TAG}
 
 elif [[ ( $1 == "stop" || $1 == "s" ) ]]; then
-  docker stop -t 5 carla_sim
+  docker stop -t 5 ${NAME}
 
 elif [[ ( $1 == "connect" || $1 == "a" ) ]]; then
-  docker exec -it carla_sim bash
+  docker exec -it ${NAME} bash
 
 fi
