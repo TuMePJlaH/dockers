@@ -1,6 +1,12 @@
-FROM carlasim/carla:0.9.12
+FROM carlasim/carla:0.9.13
 
 USER root
+
+RUN apt-key del 7fa2af80 2>&1 1>/dev/null && \
+    . /etc/os-release && \
+    apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/${ID}`echo $VERSION_ID | tr -d '.'`/`uname --machine`/3bf863cc.pub 2>&1 1>/dev/null  \
+    apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/${ID}`echo $VERSION_ID | tr -d '.'`/`uname --machine`/7fa2af80.pub 2>&1 1>/dev/null
+
 RUN apt-get update && apt-get install -y \
         xdg-user-dirs \
         xdg-utils \
@@ -34,7 +40,7 @@ RUN echo 'export PATH=/home/carla/.local/bin:$PATH' >> /home/carla/.bashrc
 
 RUN echo $PATH
 RUN pip3 install --no-cache-dir pygame==2.0.1 \
-                                carla==0.9.12 \
+                                carla==0.9.13 \
                                 Pillow==8.3.2 \
                                 numpy==1.21.2 \
                                 networkx
