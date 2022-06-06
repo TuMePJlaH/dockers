@@ -47,4 +47,6 @@ RUN pip3 install --no-cache-dir pygame==2.0.1 \
 
 RUN python3 -m pip install -r /home/carla/PythonAPI/examples/requirements.txt
 
+ENV CARLA_HOST="localhost"
+ENV CARLA_PORT="2000"
 
