@@ -46,3 +46,6 @@ RUN pip3 install -U --no-cache-dir \
         opencv-python \
         ipython \
         open3d
+
+RUN pip install -U --no-cache-dir \
+        git+https://github.com/DanielPollithy/pypcd.git
