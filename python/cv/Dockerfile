@@ -27,6 +27,7 @@ RUN apt-get update && apt-get install -y \
         python3-dev \
         python3-distutils \
         python3-pip \
+        python3-tk \
         python3.8-dev \
     && rm -rf /var/lib/apt/lists/*
 
@@ -48,4 +49,5 @@ RUN pip3 install -U --no-cache-dir \
         open3d
 
 RUN pip install -U --no-cache-dir \
-        git+https://github.com/DanielPollithy/pypcd.git
+        git+https://github.com/DanielPollithy/pypcd.git \
+        shapely
