@@ -1,4 +1,5 @@
-ARG BASE_IMAGE=ubuntu:20.04
+#ARG BASE_IMAGE=ubuntu:20.04
+ARG BASE_IMAGE=nvcr.io/nvidia/pytorch:22.01-py3
 FROM ${BASE_IMAGE} as dev-base
 
 ENV TZ=Europe/Moscow
@@ -52,3 +53,7 @@ RUN pip3 install -U --no-cache-dir \
         git+https://github.com/TuMePJlaH/plotly_draw.git \
         jupyterlab-vim
 
+RUN pip3 install -U \
+        imgaug \
+        albumentations \
+        pycuda

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+TAG="local"
+NAME="ros2_humble"
+
 CMD=" "
 for (( i=2; i <= $#; i++ ))
 do
@@ -8,7 +11,7 @@ do
 done
 
 if [[ ( $1 == "build" || $1 == "b" ) ]]; then
-  docker build -t ros:ros2-foxy-base .
+  docker build -t ${NAME}:${TAG} .
 
 elif [[ ( $1 == "start" || $1 == "u" ) ]]; then
   docker run -it \
@@ -17,15 +20,14 @@ elif [[ ( $1 == "start" || $1 == "u" ) ]]; then
              --env="DISPLAY" \
              -e "TERM=xterm-256color" \
              -v  /tmp/.X11-unix:/tmp/.X11-unix:rw \
-             --name ros2_foxy \
-             --hostname ros2_foxy \
+             --name ${NAME} \
              ${CMD} \
-             ros:ros2-foxy-base
+             ${NAME}:${TAG}
 
 elif [[ ( $1 == "stop" || $1 == "s" ) ]]; then
-  docker stop -t 5 ros2_foxy
+  docker stop -t 5 ${NAME}
 
 elif [[ ( $1 == "connect" || $1 == "a" ) ]]; then
-  docker exec -it ros2_foxy bash
+  docker exec -it ${NAME} bash
 
 fi

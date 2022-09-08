@@ -1,6 +1,6 @@
 # This is an auto generated Dockerfile for ros:ros-base
 # generated from docker_images_ros2/create_ros_image.Dockerfile.em
-FROM ros:foxy-ros-core-focal
+FROM ros:humble-ros-core-jammy
 
 RUN apt-get update && apt-get install -y \
         sudo \
@@ -35,10 +35,14 @@ RUN colcon mixin add default \
 
 # install ros2 packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        ros-foxy-ros-base=0.9.2-1* \
-        ros-foxy-turtlesim \
-        ros-foxy-demo-nodes-cpp \
+        ros-humble-ros-base \
+        ros-humble-turtlesim \
+        ros-humble-demo-nodes-cpp \
+        ros-humble-rviz2 \
     && rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install --no-cache \
+        opencv-python
 
 # create user
 ENV USERNAME=user
