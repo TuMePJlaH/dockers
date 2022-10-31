@@ -52,3 +52,6 @@ RUN pip3 install -U --no-cache-dir \
         git+https://github.com/TuMePJlaH/plotly_draw.git \
         jupyterlab-vim
 
+RUN pip3 install -U --no-cache-dir \
+        GPy
+
