@@ -55,3 +55,11 @@ RUN pip3 install -U --no-cache-dir \
 RUN pip3 install -U --no-cache-dir \
         GPy
 
+RUN pip3 install -U --no-cache-dir \
+        torch \
+        torchvision \
+        torchaudio
+
+RUN pip3 install -U --no-cache-dir \
+        mysql-connector-python \
+        psycopg2-binary
