@@ -10,3 +10,9 @@ services:
     network_mode: "host"
     volumes:
       - ./models:/models/
+	deploy:                          
+      resources:                     
+        reservations:                
+          devices:                   
+            - capabilities: [gpu]    
+

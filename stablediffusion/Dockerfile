@@ -65,6 +65,8 @@ RUN pip3 install -U --no-cache-dir \
 
 COPY --chown=${USERNAME} install.sh install.sh
 RUN chmod +x install.sh
+COPY --chown=${USERNAME} test.sh stablediffusion/test.sh
+RUN chmod +x stablediffusion/test.sh
 
 #RUN git clone https://github.com/Stability-AI/stablediffusion.git &&\
     #cd stablediffusion &&\
