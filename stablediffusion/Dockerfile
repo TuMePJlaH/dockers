@@ -42,6 +42,19 @@ WORKDIR /home/${USERNAME}
 
 ENV PATH="/home/${USERNAME}/.local/bin:${PATH}"
 
+RUN git clone https://github.com/Stability-AI/stablediffusion.git &&\
+    cd stablediffusion &&\
+    pip3 install -r requirements.txt &&\
+    pip3 install -e . &&\
+    cd ..
+
+RUN git clone https://github.com/facebookresearch/xformers.git &&\
+    cd xformers &&\
+    git submodule update --init --recursive &&\
+    pip3 install -r requirements.txt &&\
+    pip3 install -e . &&\
+    cd ..
+
 RUN pip3 install -U --no-cache-dir \
         transformers==4.19.2 \
         diffusers \
