@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+import os
+import argparse
+import shlex
+import urllib.request
+from subprocess import run
+import progressbar
+from pathlib import Path
+
+IMAGE_NAME = "stablediffusion"
+TAG_NAME = "latest"
+
+def build(args):
+    unknown_args = shlex.join(args["unknown"])
+    run(
+        (
+            "docker build "
+            "--network host "
+            f"-t {IMAGE_NAME}:{TAG_NAME} "
+            f"{unknown_args} "
+            ". "
+        ),
+        shell=True,
+        check=True,
+    )
+
+def start(args):
+    unknown_args = shlex.join(args["unknown"])
+
+    run(
+        (
+            "docker run "
+            "--privileged "
+            "-d "
+            "-it "
+            "--rm "
+            "--gpus all "
+            "--net=host "
+            "-e \"TERM=xterm-256color\" "
+            "-e DISPLAY "
+            f"--name {IMAGE_NAME} "
+            f"{unknown_args} "
+            f"{IMAGE_NAME}:{TAG_NAME}"
+        ),
+        shell=True,
+        check=True,
+    )
+
+def attach(args):
+    run(["docker", "exec", "-it", f"{IMAGE_NAME}", "bash"])
+
+def stop(args):
+    run(["docker", "container", "stop", "-t=5", f"{IMAGE_NAME}"])
+
+def main():
+    parser = argparse.ArgumentParser(description="Build and run evonets docker images")
+    subparsers = parser.add_subparsers(title="subcommands", description="valid subcommands")
+
+    build_parser = subparsers.add_parser("build", aliases=["b"], help="build docker image")
+    build_parser.set_defaults(func=build)
+
+    run_parser = subparsers.add_parser("start", aliases=["u"], help="run docker container")
+    run_parser.set_defaults(func=start)
+
+    attach_parser = subparsers.add_parser(
+        "attach", aliases=["a"], help="go inside the running container"
+    )
+    attach_parser.set_defaults(func=attach)
+
+    stop_parser = subparsers.add_parser(
+        "stop", aliases=["s"], help="stop and remove the running container"
+    )
+    stop_parser.set_defaults(func=stop)
+
+    args = dict(zip(("args", "unknown"), parser.parse_known_args()))
+    if not vars(args["args"]):
+        parser.print_usage()
+    else:
+        args["args"].func(args)
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,8 @@
+version: "1.0"
+services:
+  stabled:
+    image: "stablediffusion:latest"
+    container_name: "stabled"
+    network_mode: "host"
+    volumes:
+      - ./models:/models/
