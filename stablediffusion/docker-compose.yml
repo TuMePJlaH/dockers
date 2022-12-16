@@ -10,7 +10,7 @@ services:
     network_mode: "host"
     volumes:
       - ./models:/models/
-	deploy:                          
+    deploy:                          
       resources:                     
         reservations:                
           devices:                   
