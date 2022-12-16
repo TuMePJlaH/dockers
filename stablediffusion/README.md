@@ -1,6 +1,8 @@
 ``` bash
+# download movel to models dir
 ./c b
-docker compose up
-# intu container
-./install.sh
+./c u
+./c a
+cd stablediffusion
+./test.sh
 ```
