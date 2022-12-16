@@ -3,6 +3,10 @@ services:
   stabled:
     image: "stablediffusion:latest"
     container_name: "stabled"
+    tty: true
+    privileged: true
+    stdin_open: true
+    userns_mode: "host"
     network_mode: "host"
     volumes:
       - ./models:/models/

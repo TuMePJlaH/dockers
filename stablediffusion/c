@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
-import os
 import argparse
 import shlex
-import urllib.request
 from subprocess import run
-import progressbar
 from pathlib import Path
 
 IMAGE_NAME = "stablediffusion"
 TAG_NAME = "latest"
+NAME = "stabled"
 
 def build(args):
     unknown_args = shlex.join(args["unknown"])
+    Path('./models').mkdir(exist_ok=True)
     run(
         (
             "docker build "
@@ -27,30 +26,16 @@ def build(args):
 def start(args):
     unknown_args = shlex.join(args["unknown"])
 
-    run(
-        (
-            "docker run "
-            "--privileged "
-            "-d "
-            "-it "
-            "--rm "
-            "--gpus all "
-            "--net=host "
-            "-e \"TERM=xterm-256color\" "
-            "-e DISPLAY "
-            f"--name {IMAGE_NAME} "
-            f"{unknown_args} "
-            f"{IMAGE_NAME}:{TAG_NAME}"
-        ),
-        shell=True,
-        check=True,
-    )
+    run(["docker", "compose", "up", "-d"])
 
 def attach(args):
-    run(["docker", "exec", "-it", f"{IMAGE_NAME}", "bash"])
+    run(["docker", "exec", "-it", f"{NAME}", "bash"])
 
 def stop(args):
-    run(["docker", "container", "stop", "-t=5", f"{IMAGE_NAME}"])
+    run(["docker", "compose", "stop",])
+
+def remove(args):
+    run(["docker", "rm", NAME])
 
 def main():
     parser = argparse.ArgumentParser(description="Build and run evonets docker images")
@@ -59,18 +44,17 @@ def main():
     build_parser = subparsers.add_parser("build", aliases=["b"], help="build docker image")
     build_parser.set_defaults(func=build)
 
-    run_parser = subparsers.add_parser("start", aliases=["u"], help="run docker container")
+    run_parser = subparsers.add_parser("start", aliases=["u"], help="docker compose up")
     run_parser.set_defaults(func=start)
 
-    attach_parser = subparsers.add_parser(
-        "attach", aliases=["a"], help="go inside the running container"
-    )
+    attach_parser = subparsers.add_parser( "attach", aliases=["a"], help="go inside the running container" )
     attach_parser.set_defaults(func=attach)
 
-    stop_parser = subparsers.add_parser(
-        "stop", aliases=["s"], help="stop and remove the running container"
-    )
+    stop_parser = subparsers.add_parser( "stop", aliases=["s"], help="docker compose stop")
     stop_parser.set_defaults(func=stop)
+
+    remove_parser = subparsers.add_parser( "remove", aliases=["rm"], help="remove container")
+    remove_parser.set_defaults(func=remove)
 
     args = dict(zip(("args", "unknown"), parser.parse_known_args()))
     if not vars(args["args"]):

@@ -42,15 +42,15 @@ WORKDIR /home/${USERNAME}
 
 ENV PATH="/home/${USERNAME}/.local/bin:${PATH}"
 
-RUN pip install -U --no-chache-dir \
+RUN pip3 install -U --no-cache-dir \
         transformers==4.19.2 \
         diffusers \
         invisible-watermark \
         omegaconf \
         pytorch_lightning \
-        pen_clip_torch
+        open_clip_torch
 
-COPY install.sh install.sh
+COPY --chown=${USERNAME} install.sh install.sh
 RUN chmod +x install.sh
 
 #RUN git clone https://github.com/Stability-AI/stablediffusion.git &&\
