@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=ubuntu:20.04
+ARG BASE_IMAGE=nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04
 FROM ${BASE_IMAGE} as dev-base
 
 ENV TZ=Europe/Moscow
@@ -15,6 +15,7 @@ run apt-get update && apt-get install -y --no-install-recommends \
         wget \
         vim-gtk \
     && rm -rf /var/lib/apt/lists/*
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
         libjpeg-dev \
         libpng-dev \
@@ -24,14 +25,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && apt-get install -y \
+        libprotobuf-dev \
+        protobuf-compiler \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && apt-get install -y \
         python3-dev \
         python3-distutils \
         python3-pip \
         python3-tk \
-        python3.8-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN ln -f -s /usr/bin/python3.8 /usr/bin/python3 && \
+RUN ln -f -s /usr/bin/python3.10 /usr/bin/python3 && \
     curl -sSL https://bootstrap.pypa.io/get-pip.py | python3 -
 
 # create user
@@ -41,34 +46,4 @@ USER ${USERNAME}
 WORKDIR /home/${USERNAME}
 
 ENV PATH="/home/${USERNAME}/.local/bin:${PATH}"
-
-RUN pip3 install -U --no-cache-dir \
-        numpy \
-        opencv-python \
-        ipython \
-        open3d \
-        git+https://github.com/DanielPollithy/pypcd.git \
-        shapely \
-        jupyterlab \
-        jupyterlab-vim
-        #git+https://github.com/TuMePJlaH/plotly_draw.git \
-
-RUN pip3 install -U --no-cache-dir \
-        GPy
-
-RUN pip3 install -U --no-cache-dir \
-        torch \
-        torchvision \
-        torchaudio
-
-RUN pip3 install -U --no-cache-dir \
-        mysql-connector-python \
-        psycopg2-binary
-
-RUN pip3 install -U --no-cache-dir \
-        jira \
-        dash \
-        dash-bootstrap-components \
-        dash-mantine-components \
-        dash-iconify
-
+ENV LIBRARY_PATH="/usr/local/cuda/lib64/:${LIBRARY_PATH}"

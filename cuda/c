@@ -1,0 +1,36 @@
+#!/bin/bash
+
+TAG="local"
+NAME="cpp_cuda"
+
+CMD=" "
+for (( i=2; i <= $#; i++ ))
+do
+  CMD+=${!i}
+  CMD+=" "
+done
+
+if [[ ( $1 == "build" || $1 == "b" ) ]]; then
+  docker build -t python/${NAME}:${TAG} .
+
+elif [[ ( $1 == "start" || $1 == "u" ) ]]; then
+  docker run --privileged \
+             -it \
+             -d \
+             --rm \
+             --gpus all \
+             --net=host \
+             -v  /tmp/.X11-unix:/tmp/.X11-unix:rw \
+             --env="DISPLAY" \
+             --name ${NAME} \
+             -e "TERM=xterm-256color" \
+             ${CMD} \
+             python/${NAME}:${TAG}
+
+elif [[ ( $1 == "stop" || $1 == "s" ) ]]; then
+  docker stop -t 5 ${NAME}
+
+elif [[ ( $1 == "connect" || $1 == "a" ) ]]; then
+  docker exec -it ${NAME} bash
+
+fi
