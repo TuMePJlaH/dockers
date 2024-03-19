@@ -70,5 +70,6 @@ RUN pip3 install -U --no-cache-dir \
         dash \
         dash-bootstrap-components \
         dash-mantine-components \
-        dash-iconify
+        dash-iconify \
+        python-gitlab
 
